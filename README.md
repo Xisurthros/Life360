@@ -38,3 +38,4 @@
 
 ### Future Plans
 > Clean up Headers and Authtoken
+> Set/Change Circle
