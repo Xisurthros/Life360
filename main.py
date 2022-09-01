@@ -97,8 +97,11 @@ class life360:
         print(response.json())
 
     def circle_info(self):
+        print('control-c to break loop')
+        print('beginning...')
+        time.sleep(3)
+        try:
             while True:
-               #
                 headers = {
                     'Accept': 'application/json',
                     'Authorization': f'Bearer {self.access_token}',
@@ -115,6 +118,7 @@ class life360:
                     'members': data['members']
                 }
                 for person in group['members']:
+
                     homies = {
                         'ID': person['id'],
                         'First': person['firstName'],
@@ -134,4 +138,45 @@ class life360:
                         'Longitude': person['location']['longitude'],
                         'createAt': time.ctime(int(person['createdAt']))
                     }
-                    print(homies)
+                    print(homies, '\n\n')
+        except KeyboardInterrupt:
+            print(KeyboardInterrupt)
+
+def help():
+    print('[COMMANDS]')
+    print('get_me:\tInformation about account used to login.')
+    print('get_circles:\tUsers circle information.')
+    print('get_code:\tGet active code if any.')
+    print('get_messages:\tGet all messages of the account user to login.')
+    print('get_history:\tGet history of users in the circle.')
+    print('get_emergency_contacts:\tGet emergency contact information of account used to login.')
+    print('circle_info:\tGet current information of all users in the circle.')
+
+def main():
+    print("Type: 'help' for a list of commands.")
+    while True:
+        user_input = input('Enter: ')
+        user_input.lower()
+        if user_input == 'help':
+            help()
+        elif user_input == 'get_me':
+            life360.get_me()
+        elif user_input == 'get_circles':
+            life360.get_circles()
+        elif user_input == 'get_code':
+            life360.get_code()
+        elif user_input == 'get_messages':
+            life360.get_messages()
+        elif user_input == 'get_history':
+            life360.get_history()
+        elif user_input == 'get_emergency_contacts':
+            life360.get_emergency_contacts()
+        elif user_input == 'circle_info':
+            life360.circle_info()
+        else:
+            print('Invalid input. Try Again.')
+
+
+if __name__ == '__main__':
+    life360 = life360()
+    main()
