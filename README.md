@@ -34,7 +34,7 @@
 > Auth Token most likely changes, but this is can be sniffed or googled
 >
 > API version can change. At the time of this program creating it is currently on v3.\
-> This is mostlikely going to change to v4 soon based on what I can tell.
+> This is most likely going to change to v4 soon based on what I can tell.
 
 ### Future Plans
 > Clean up Headers and Authtoken\
