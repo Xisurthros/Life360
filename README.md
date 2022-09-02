@@ -37,5 +37,4 @@
 > This is most likely going to change to v4 soon based on what I can tell.
 
 ### Future Plans
-> Clean up Headers and Authtoken\
-> Set/Change Circle
+> Clean up Headers and Authtoken

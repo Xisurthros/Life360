@@ -22,6 +22,7 @@ def convert(data):
 class life360:
 
     def __init__(self):
+        self.circleID = ''
         try:
             headers = {
                 'Accept': 'application/json',
@@ -52,8 +53,8 @@ class life360:
             'Authorization': f'Bearer {self.access_token}',
         }
         
-        response = requests.get('https://www.life360.com/v3/circles.json', headers=headers)
-        print(response.json())
+        response = requests.get('https://www.life360.com/v3/circles.json', headers=headers).json()
+        return response
     
     def get_code(self):
         headers = {
@@ -61,7 +62,7 @@ class life360:
             'Authorization': f'Bearer {self.access_token}',
         }
         
-        response = requests.get('https://www.life360.com/v3/circles/f91107d1-b4e2-418d-9b04-198a75bf3802/code', headers=headers)
+        response = requests.get(f'https://www.life360.com/v3/circles/{self.circleID}/code', headers=headers)
         print(response.json())
 
     def get_messages(self):
@@ -70,7 +71,7 @@ class life360:
             'Authorization': f'Bearer {self.access_token}',
         }
         
-        response = requests.get('https://www.life360.com/v3/circles/f91107d1-b4e2-418d-9b04-198a75bf3802/messages', headers=headers)
+        response = requests.get(f'https://www.life360.com/v3/circles/{self.circleID}/messages', headers=headers)
 
         for item in response.json()['messages']:
             print(item,'\n')
@@ -81,7 +82,7 @@ class life360:
             'Authorization': f'Bearer {self.access_token}',
         }
         
-        response = requests.get('https://www.life360.com/v3/circles/f91107d1-b4e2-418d-9b04-198a75bf3802/members/history', headers=headers)
+        response = requests.get(f'https://www.life360.com/v3/circles/{self.circleID}/members/history', headers=headers)
         #print(response.json())
 
         for item in response.json()['locations']:
@@ -93,7 +94,7 @@ class life360:
             'Authorization': f'Bearer {self.access_token}',
         }
         
-        response = requests.get('https://www.life360.com/v3/circles/f91107d1-b4e2-418d-9b04-198a75bf3802/emergencyContacts', headers=headers)
+        response = requests.get(f'https://www.life360.com/v3/circles/{self.circleID}/emergencyContacts', headers=headers)
         print(response.json())
 
     def circle_info(self):
@@ -107,7 +108,7 @@ class life360:
                     'Authorization': f'Bearer {self.access_token}',
                 }
                 
-                response = requests.get('https://www.life360.com/v3/circles/f91107d1-b4e2-418d-9b04-198a75bf3802', headers=headers)
+                response = requests.get(f'https://www.life360.com/v3/circles/{self.circleID}', headers=headers)
                 data = response.json()
                 group = {
                     'ID': data['id'],
@@ -142,6 +143,16 @@ class life360:
         except KeyboardInterrupt:
             print(KeyboardInterrupt)
 
+def set_circle():
+    circles = life360.get_circles()['circles']
+    circleData = {}
+    for circle in circles:
+        circleData[circle['name']] = circle['id']
+    print(circleData)
+    user_input = input('Enter circle name: ')
+    life360.circleID = circleData[user_input]
+
+
 def help():
     print('[COMMANDS]')
     print('get_me:\tInformation about account used to login.')
@@ -153,16 +164,21 @@ def help():
     print('circle_info:\tGet current information of all users in the circle.')
 
 def main():
+    print("Start by setting the circle you want to track(set_circle).")
     print("Type: 'help' for a list of commands.")
     while True:
         user_input = input('Enter: ')
         user_input.lower()
         if user_input == 'help':
             help()
+        elif user_input == 'test':
+            print(life360.circle)
+        elif user_input == 'set_circle':
+            set_circle()
         elif user_input == 'get_me':
             life360.get_me()
         elif user_input == 'get_circles':
-            life360.get_circles()
+            print(life360.get_circles())
         elif user_input == 'get_code':
             life360.get_code()
         elif user_input == 'get_messages':
