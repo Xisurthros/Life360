@@ -1,25 +1,21 @@
 import requests, time, json
 
 def speedProcess(speed):
-
-        if speed < 0:
-            return 0.0
-        else:
-            return speed
+    if speed < 0:
+        return 0.0
+    else:
+        return speed
 
 def binary_string(data):
-
     if data == 0:
         return False
     else:
         return True
 
 def convert(data):
-
     return tuple(x for x in data)
 
 def getAccessToken(username, password):
-
     headers = {
                 'Accept': 'application/json',
                 'Authorization': 'Basic U3dlcUFOQWdFVkVoVWt1cGVjcmVrYXN0ZXFhVGVXckFTV2E1dXN3MzpXMnZBV3JlY2hhUHJlZGFoVVJhZ1VYYWZyQW5hbWVqdQ==', #This code seems to change from time to time
@@ -58,26 +54,21 @@ class Life360:
         return f'{user_input} has been set as the active cirle'
 
     def get_me(self):
-
         return requests.get('https://www.life360.com/v3/users/me', headers=self.headers).json()
 
     def get_circles(self):
-        
         return requests.get('https://www.life360.com/v3/circles.json', headers=self.headers).json()
     
     def get_code(self):
         return requests.get(f'https://www.life360.com/v3/circles/{self.circleID}/code', headers=self.headers).json()
 
     def get_messages(self):
-
         return requests.get(f'https://www.life360.com/v3/circles/{self.circleID}/messages', headers=self.headers).json()
 
     def get_history(self):
-
         return requests.get(f'https://www.life360.com/v3/circles/{self.circleID}/members/history', headers=self.headers).json()['locations']
 
     def get_emergency_contacts(self):
-
         return requests.get(f'https://www.life360.com/v3/circles/{self.circleID}/emergencyContacts', headers=self.headers).json()
 
     def get_circle_info(self):
