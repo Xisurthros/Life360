@@ -2,9 +2,9 @@ from life360 import Life360
 
 def main():
 
-    function_dict = {'get_me': life360.get_me, 'get_circles': life360.get_circles,
-                    'get_code': life360.get_code, 'get_messages': life360.get_messages,
-                    'get_history': life360.get_history, 'get_emergency_contacts': life360.get_emergency_contacts,
+    function_dict = {'me': life360.me, 'circles': life360.circles,
+                    'code': life360.code, 'messages': life360.messages,
+                    'history': life360.history, 'emergency_contacts': life360.emergency_contacts,
                     'set_circle': life360.set_circle, 'help': life360.help}
 
     while True:
@@ -12,10 +12,10 @@ def main():
         user_input.lower()
         if user_input in function_dict:
             print(function_dict[user_input]())
-        elif user_input == 'get_circle_info':
+        elif user_input == 'circle_info':
             try: 
                 while True:
-                    print(life360.get_circle_info())
+                    print(life360.circle_info())
             except KeyboardInterrupt:
                 print(KeyboardInterrupt)
         else:

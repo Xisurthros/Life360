@@ -44,7 +44,7 @@ class Life360:
         self.stopCircle = True
     
     def set_circle(self):
-        circles = self.get_circles()['circles']
+        circles = self.circles()['circles']
         circleData = {}
         for circle in circles:
             circleData[circle['name']] = circle['id']
@@ -53,25 +53,25 @@ class Life360:
         self.circleID = circleData[user_input]
         return f'{user_input} has been set as the active cirle'
 
-    def get_me(self):
+    def me(self):
         return requests.get('https://www.life360.com/v3/users/me', headers=self.headers).json()
 
-    def get_circles(self):
+    def circles(self):
         return requests.get('https://www.life360.com/v3/circles.json', headers=self.headers).json()
     
-    def get_code(self):
+    def code(self):
         return requests.get(f'https://www.life360.com/v3/circles/{self.circleID}/code', headers=self.headers).json()
 
-    def get_messages(self):
+    def messages(self):
         return requests.get(f'https://www.life360.com/v3/circles/{self.circleID}/messages', headers=self.headers).json()
 
-    def get_history(self):
+    def history(self):
         return requests.get(f'https://www.life360.com/v3/circles/{self.circleID}/members/history', headers=self.headers).json()['locations']
 
-    def get_emergency_contacts(self):
+    def emergency_contacts(self):
         return requests.get(f'https://www.life360.com/v3/circles/{self.circleID}/emergencyContacts', headers=self.headers).json()
 
-    def get_circle_info(self):
+    def circle_info(self):
         if self.stopCircle == True:
             print('control-c to break loop')
             print('beginning...')
@@ -115,10 +115,10 @@ class Life360:
 
     def help(self):
         return '''[COMMANDS]
-get_me:\t\t\t\tInformation about account used to login.
-get_circles:\t\t\tUsers circle information.
-get_code:\t\t\tGet active code if any.
-get_messages:\t\t\tGet all messages of the account user to login.
-get_history:\t\t\tGet history of users in the circle.
-get_emergency_contacts:\t\tGet emergency contact information of account used to login.
-get_circle_info:\t\t\tGet current information of all users in the circle.'''
+me:\t\t\t\tInformation about account used to login.
+circles:\t\t\tUsers circle information.
+code:\t\t\tGet active code if any.
+messages:\t\t\tGet all messages of the account user to login.
+history:\t\t\tGet history of users in the circle.
+emergency_contacts:\t\tGet emergency contact information of account used to login.
+circle_info:\t\t\tGet current information of all users in the circle.'''
