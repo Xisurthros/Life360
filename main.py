@@ -7,20 +7,12 @@ def main():
                     'get_history': life360.get_history, 'get_emergency_contacts': life360.get_emergency_contacts,
                     'set_circle': life360.set_circle, 'help': life360.help}
 
-    print("Start by setting the circle you want to track(set_circle).")
-    print("Type: 'help' for a list of commands.")
-
     while True:
         user_input = input('Enter: ')
         user_input.lower()
         if user_input in function_dict:
             print(function_dict[user_input]())
-        elif user_input == 'help':
-            help()
         elif user_input == 'get_circle_info':
-            print('control-c to break loop')
-            print('beginning...')
-            time.sleep(3)
             try: 
                 while True:
                     print(life360.get_circle_info())

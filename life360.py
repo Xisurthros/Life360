@@ -28,11 +28,15 @@ def getAccessToken(username, password):
     data = f'username={username}&password={password}&grant_type=password'
         
     return requests.post('https://www.life360.com/v3/oauth2/token', headers=headers, data=data).json()['access_token']
-            
+
+def start_message():
+    print("Start by setting the circle you want to track(set_circle).")
+    print("Type: 'help' for a list of commands.")
 
 class Life360:
 
     def __init__(self, username, password):
+        self.start_message = start_message()
         self.username = username
         self.password = password
         self.circleID = ''
@@ -41,9 +45,10 @@ class Life360:
             'Accept': 'application/json',
             'Authorization': f'Bearer {self.access_token}',
             }
+        self.stopCircle = True
     
     def set_circle(self):
-        circles = life360.get_circles()['circles']
+        circles = self.get_circles()['circles']
         circleData = {}
         for circle in circles:
             circleData[circle['name']] = circle['id']
@@ -76,6 +81,11 @@ class Life360:
         return requests.get(f'https://www.life360.com/v3/circles/{self.circleID}/emergencyContacts', headers=self.headers).json()
 
     def get_circle_info(self):
+        if self.stopCircle == True:
+            print('control-c to break loop')
+            print('beginning...')
+            time.sleep(3)
+            self.stopCircle = False
         
         users = []
 
