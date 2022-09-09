@@ -6,10 +6,6 @@ def speedProcess(speed):
         else:
             return speed
 
-def write_json(json_data, filename="data.json"):
-    with open(filename, 'w') as f:
-        json.dump(json_data, f, indent=4)
-
 def binary_string(data):
     if data == 0:
         return False
@@ -19,97 +15,59 @@ def binary_string(data):
 def convert(data):
     return tuple(x for x in data)
 
-class life360:
-
-    def __init__(self):
-        self.circleID = ''
-        try:
-            headers = {
+def getAccessToken(username, password):
+    headers = {
                 'Accept': 'application/json',
                 'Authorization': 'Basic U3dlcUFOQWdFVkVoVWt1cGVjcmVrYXN0ZXFhVGVXckFTV2E1dXN3MzpXMnZBV3JlY2hhUHJlZGFoVVJhZ1VYYWZyQW5hbWVqdQ==', #This code seems to change from time to time
-                'Content-Type': 'application/x-www-form-urlencoded',
-            }
+                'Content-Type': 'application/x-www-form-urlencoded'
+                }
+    data = f'username={username}&password={password}&grant_type=password'
         
-            data = 'username=YOUREMAIL&password=YOURPASSWORD&grant_type=password' #Sub your email and password
-        
-            response = requests.post('https://www.life360.com/v3/oauth2/token', headers=headers, data=data) #Possibly updated to v4 now
+    return requests.post('https://www.life360.com/v3/oauth2/token', headers=headers, data=data).json()['access_token']
+            
 
-            self.access_token = response.json()['access_token']
-        except json.decoder.JSONDecodeError:
-            pass
+class life360:
+
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
+        self.circleID = ''
+        self.access_token = getAccessToken(self.username, self.password)
+        self.headers = {
+            'Accept': 'application/json',
+            'Authorization': f'Bearer {self.access_token}',
+            }
     
     def get_me(self):
-        headers = {
-            'Accept': 'application/json',
-            'Authorization': f'Bearer {self.access_token}',
-        }
-        
-        response = requests.get('https://www.life360.com/v3/users/me', headers=headers)
-        print(response.json())
+
+        return requests.get('https://www.life360.com/v3/users/me', headers=self.headers).json()
 
     def get_circles(self):
-        headers = {
-            'Accept': 'application/json',
-            'Authorization': f'Bearer {self.access_token}',
-        }
         
-        response = requests.get('https://www.life360.com/v3/circles.json', headers=headers).json()
-        return response
+        return requests.get('https://www.life360.com/v3/circles.json', headers=self.headers).json()
     
     def get_code(self):
-        headers = {
-            'Accept': 'application/json',
-            'Authorization': f'Bearer {self.access_token}',
-        }
-        
-        response = requests.get(f'https://www.life360.com/v3/circles/{self.circleID}/code', headers=headers)
-        print(response.json())
+        return requests.get(f'https://www.life360.com/v3/circles/{self.circleID}/code', headers=self.headers).json()
 
     def get_messages(self):
-        headers = {
-            'Accept': 'application/json',
-            'Authorization': f'Bearer {self.access_token}',
-        }
-        
-        response = requests.get(f'https://www.life360.com/v3/circles/{self.circleID}/messages', headers=headers)
 
-        for item in response.json()['messages']:
-            print(item,'\n')
+        return requests.get(f'https://www.life360.com/v3/circles/{self.circleID}/messages', headers=self.headers).json()
 
     def get_history(self):
-        headers = {
-            'Accept': 'application/json',
-            'Authorization': f'Bearer {self.access_token}',
-        }
-        
-        response = requests.get(f'https://www.life360.com/v3/circles/{self.circleID}/members/history', headers=headers)
-        #print(response.json())
 
-        for item in response.json()['locations']:
-            print(item, '\n')
+        return requests.get(f'https://www.life360.com/v3/circles/{self.circleID}/members/history', headers=self.headers).json()['locations']
 
     def get_emergency_contacts(self):
-        headers = {
-            'Accept': 'application/json',
-            'Authorization': f'Bearer {self.access_token}',
-        }
-        
-        response = requests.get(f'https://www.life360.com/v3/circles/{self.circleID}/emergencyContacts', headers=headers)
-        print(response.json())
 
-    def circle_info(self):
+        return requests.get(f'https://www.life360.com/v3/circles/{self.circleID}/emergencyContacts', headers=self.headers).json()
+
+    def get_circle_info(self):
         print('control-c to break loop')
         print('beginning...')
         time.sleep(3)
         try:
             while True:
-                headers = {
-                    'Accept': 'application/json',
-                    'Authorization': f'Bearer {self.access_token}',
-                }
-                
-                response = requests.get(f'https://www.life360.com/v3/circles/{self.circleID}', headers=headers)
-                data = response.json()
+                data = requests.get(f'https://www.life360.com/v3/circles/{self.circleID}', headers=self.headers).json()
                 group = {
                     'ID': data['id'],
                     'Group Name': data['name'],
@@ -120,7 +78,7 @@ class life360:
                 }
                 for person in group['members']:
 
-                    homies = {
+                    homie = {
                         'ID': person['id'],
                         'First': person['firstName'],
                         'Last': person['lastName'],
@@ -129,7 +87,7 @@ class life360:
                         'Since': time.ctime(person['location']['since']),
                         'inTransit': binary_string(person['location']['inTransit']),
                         'isDriving': binary_string(person['location']['isDriving']),
-                        'Speed': speedProcess(person['location']['speed']*2.23),
+                        'Speed': speedProcess(person['location']['speed']*2.23),        # 2.23 is an approximation of the conversion rate to MPG
                         'Sharing': binary_string(person['features']['shareLocation']),
                         'Battery': person['location']['battery'],
                         'wifiState': binary_string(person['location']['wifiState']),
@@ -139,7 +97,7 @@ class life360:
                         'Longitude': person['location']['longitude'],
                         'createAt': time.ctime(int(person['createdAt']))
                     }
-                    print(homies, '\n\n')
+                    print(homie, '\n')
         except KeyboardInterrupt:
             print(KeyboardInterrupt)
 
@@ -152,47 +110,38 @@ def set_circle():
     user_input = input('Enter circle name: ')
     life360.circleID = circleData[user_input]
 
-
 def help():
     print('[COMMANDS]')
-    print('get_me:\tInformation about account used to login.')
-    print('get_circles:\tUsers circle information.')
-    print('get_code:\tGet active code if any.')
-    print('get_messages:\tGet all messages of the account user to login.')
-    print('get_history:\tGet history of users in the circle.')
-    print('get_emergency_contacts:\tGet emergency contact information of account used to login.')
-    print('circle_info:\tGet current information of all users in the circle.')
+    print('get_me:\t\t\t\tInformation about account used to login.')
+    print('get_circles:\t\t\tUsers circle information.')
+    print('get_code:\t\t\tGet active code if any.')
+    print('get_messages:\t\t\tGet all messages of the account user to login.')
+    print('get_history:\t\t\tGet history of users in the circle.')
+    print('get_emergency_contacts:\t\tGet emergency contact information of account used to login.')
+    print('get_circle_info:\t\t\tGet current information of all users in the circle.')
 
 def main():
+
+    function_dict = {'get_me': life360.get_me, 'get_circles': life360.get_circles,
+                    'get_code': life360.get_code, 'get_messages': life360.get_messages,
+                    'get_history': life360.get_history, 'get_emergency_contacts': life360.get_emergency_contacts,
+                    'get_circle_info': life360.get_circle_info}
+
     print("Start by setting the circle you want to track(set_circle).")
     print("Type: 'help' for a list of commands.")
+
     while True:
         user_input = input('Enter: ')
         user_input.lower()
-        if user_input == 'help':
+        if user_input in function_dict:
+            print(function_dict[user_input]())
+        elif user_input == 'help':
             help()
-        elif user_input == 'test':
-            print(life360.circle)
         elif user_input == 'set_circle':
             set_circle()
-        elif user_input == 'get_me':
-            life360.get_me()
-        elif user_input == 'get_circles':
-            print(life360.get_circles())
-        elif user_input == 'get_code':
-            life360.get_code()
-        elif user_input == 'get_messages':
-            life360.get_messages()
-        elif user_input == 'get_history':
-            life360.get_history()
-        elif user_input == 'get_emergency_contacts':
-            life360.get_emergency_contacts()
-        elif user_input == 'circle_info':
-            life360.circle_info()
         else:
             print('Invalid input. Try Again.')
 
-
 if __name__ == '__main__':
-    life360 = life360()
+    life360 = life360('USER_EMAIL', 'USER_PASSWORD')
     main()
