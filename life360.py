@@ -26,7 +26,7 @@ def getAccessToken(username, password):
     return requests.post('https://www.life360.com/v3/oauth2/token', headers=headers, data=data).json()['access_token']
             
 
-class life360:
+class Life360:
 
     def __init__(self, username, password):
         self.username = username
@@ -143,5 +143,5 @@ def main():
             print('Invalid input. Try Again.')
 
 if __name__ == '__main__':
-    life360 = life360('USER_EMAIL', 'USER_PASSWORD')
+    life360 = Life360('USER_EMAIL', 'USER_PASSWORD')
     main()
