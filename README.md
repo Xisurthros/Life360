@@ -9,7 +9,8 @@
 > Member Count\
 > Member Names & Information\
 > Personal Unread Messages\
-> Personal Unread Notifications
+> Personal Unread Notifications\
+> Emergence Contacts
 
 - Members
 > Life360 ID\
@@ -24,7 +25,7 @@
 > Location Sharing\
 > Battery\
 > wifiState\
-> Phone\
+> Phone Number\
 > Email\
 > Latitde\
 > Longitude\
