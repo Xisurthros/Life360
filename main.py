@@ -4,8 +4,9 @@ def main():
 
     function_dict = {'me': life360.me, 'circles': life360.circles,
                     'code': life360.code, 'messages': life360.messages,
-                    'history': life360.history, 'emergency_contacts': life360.emergency_contacts,
-                    'set_circle': life360.set_circle, 'help': life360.help}
+                    'circle_data': life360.circle_data, 'history': life360.history,
+                    'emergency_contacts': life360.emergency_contacts, 'set_circle': life360.set_circle, 
+                    'help': life360.help}
 
     while True:
         user_input = input('Enter: ')

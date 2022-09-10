@@ -71,7 +71,19 @@ class Life360:
     def emergency_contacts(self):
         return requests.get(f'https://www.life360.com/v3/circles/{self.circleID}/emergencyContacts', headers=self.headers).json()
 
-    def circle_info(self):
+    def circle_data(self):
+        data = requests.get(f'https://www.life360.com/v3/circles/{self.circleID}', headers=self.headers).json()
+        group = {
+            'ID': data['id'],
+            'Group Name': data['name'],
+            'Member Count': data['memberCount'],
+            'unreadMessages': data['unreadMessages'],
+            'unreadNotification': data['unreadNotifications'],
+            'members': [{'firstName': person['firstName'], 'lastName': person['lastName']} for person in data['members']]
+        }
+        return group
+
+    def circle_live(self):
         if self.stopCircle == True:
             print('control-c to break loop')
             print('beginning...')
@@ -81,14 +93,6 @@ class Life360:
         users = []
 
         data = requests.get(f'https://www.life360.com/v3/circles/{self.circleID}', headers=self.headers).json()
-        group = {
-            'ID': data['id'],
-            'Group Name': data['name'],
-            'Member Count': data['memberCount'],
-            'unreadMessages': data['unreadMessages'],
-            'unreadNotification': data['unreadNotifications'],
-            'members': data['members']
-        }
         for person in group['members']:
 
             user = {
@@ -117,8 +121,9 @@ class Life360:
         return '''[COMMANDS]
 me:\t\t\t\tInformation about account used to login.
 circles:\t\t\tUsers circle information.
-code:\t\t\tGet active code if any.
+code:\t\t\t\tGet active code if any.
 messages:\t\t\tGet all messages of the account user to login.
 history:\t\t\tGet history of users in the circle.
 emergency_contacts:\t\tGet emergency contact information of account used to login.
-circle_info:\t\t\tGet current information of all users in the circle.'''
+circle_data:\t\t\tGet circle data.
+circle_live:\t\t\tGet current information of all users in the circle.'''
