@@ -106,5 +106,5 @@ pyLife360 officially supports Python 3.6+.
 
 ## Cloning the repository
 ```shell
-git clone https://github.com/psf/requests.git
+git clone https://github.com/Xisurthros/Life360.git
 ```
