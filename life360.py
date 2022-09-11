@@ -18,7 +18,7 @@ def convert(data):
 def getAccessToken(username, password):
     headers = {
                 'Accept': 'application/json',
-                'Authorization': 'Basic U3dlcUFOQWdFVkVoVWt1cGVjcmVrYXN0ZXFhVGVXckFTV2E1dXN3MzpXMnZBV3JlY2hhUHJlZGFoVVJhZ1VYYWZyQW5hbWVqdQ==', #This code seems to change from time to time
+                'Authorization': 'Basic U3dlcUFOQWdFVkVoVWt1cGVjcmVrYXN0ZXFhVGVXckFTV2E1dXN3MzpXMnZBV3JlY2hhUHJlZGFoVVJhZ1VYYWZyQW5hbWVqdQ==',
                 'Content-Type': 'application/x-www-form-urlencoded'
                 }
     data = f'username={username}&password={password}&grant_type=password'
@@ -119,8 +119,9 @@ class Life360:
 
     def help(self):
         return '[COMMANDS]\n'\
-               'me:\t\t\t\tInformation about account used to login.\n'\
-               'circles:\t\t\tUsers circle information.\n'\
+               'set_circle:\t\t\tSet the active circle to get additional information.\n'\
+               'me:\t\t\t\tGet information about account used to login.\n'\
+               'circles:\t\t\tGet users circle information.\n'\
                'code:\t\t\t\tGet active code if any.\n'\
                'messages:\t\t\tGet all messages of the account user to login.\n'\
                'history:\t\t\tGet history of users in the circle.\n'\
