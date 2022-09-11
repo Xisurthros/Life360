@@ -58,7 +58,7 @@ circle_live:                    Get current information of all users in the circ
 pyLife360 is available on PyPI:
 
 ```console
-$ python -m pip install requests
+$ pip install pyLife360
 ```
 
 pyLife360 officially supports Python 3.6+.
