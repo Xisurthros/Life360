@@ -4,7 +4,7 @@
 
 ## Main example:
 ```python
-from life360 import Life360
+from pyLife360 import Life360
 def main():
     function_dict = {'me': life360.me, 'circles': life360.circles,
                     'code': life360.code, 'messages': life360.messages,
