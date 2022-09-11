@@ -118,12 +118,12 @@ class Life360:
         return users
 
     def help(self):
-        return '''[COMMANDS]
-me:\t\t\t\tInformation about account used to login.
-circles:\t\t\tUsers circle information.
-code:\t\t\t\tGet active code if any.
-messages:\t\t\tGet all messages of the account user to login.
-history:\t\t\tGet history of users in the circle.
-emergency_contacts:\t\tGet emergency contact information of account used to login.
-circle_data:\t\t\tGet circle data.
-circle_live:\t\t\tGet current information of all users in the circle.'''
+        return '[COMMANDS]\n'\
+               'me:\t\t\t\tInformation about account used to login.\n'\
+               'circles:\t\t\tUsers circle information.\n'\
+               'code:\t\t\t\tGet active code if any.\n'\
+               'messages:\t\t\tGet all messages of the account user to login.\n'\
+               'history:\t\t\tGet history of users in the circle.\n'\
+               'emergency_contacts:\t\tGet emergency contact information of account used to login.\n'\
+               'circle_data:\t\t\tGet circle data.\n'\
+               'circle_live:\t\t\tGet current information of all users in the circle.'
