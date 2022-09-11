@@ -1,4 +1,4 @@
-from life360 import Life360
+from pyLife360 import Life360
 
 def main():
 
