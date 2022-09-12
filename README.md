@@ -61,7 +61,7 @@ pyLife360 is available on PyPI:
 $ pip install pyLife360
 ```
 
-pyLife360 officially supports Python 3.6+.
+pyLife360 officially supports Python 3.7+.
 
 ## Supported Features
 - [help] - Get all commands listed below.
